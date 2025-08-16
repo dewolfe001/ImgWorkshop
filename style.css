@@ -28,3 +28,17 @@ canvas {
 #controls > * {
     margin-right: 10px;
 }
+
+#filter-controls {
+    margin-top: 10px;
+}
+
+#filter-controls .filter {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+#filter-controls .filter label {
+    width: 100px;
+}
