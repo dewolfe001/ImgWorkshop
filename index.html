@@ -48,12 +48,12 @@
       <div class="filter"><label for="blur">Blur:</label>
         <input type="range" id="blur" min="0" max="10" step="1" value="0"></div>
     </details>
-    <a id="upgrade" class="button" href="php/payment.php">Upgrade to Premium</a>
+    <a id="upgrade" class="button" href="payment.php">Upgrade to Premium</a>
   </div>
 </div>
 <script type="module" src="src/main.js"></script>
 <script>
-fetch('php/check_subscription.php')
+fetch('check_subscription.php')
   .then(r => r.json())
   .then(data => {
     if (data.premium) {
