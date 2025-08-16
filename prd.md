@@ -53,6 +53,7 @@ A browser-based image conversion and optimization tool that allows users to uplo
 
 #### 3.1.2 Cropping System
 - **Predefined shapes**: Square, Circle, Rectangle (16:9, 4:3, 1:1)
+- **Crop with shapes** use common shapes to crop the image - see https://github.com/dewolfe001/ImgWorkshop/blob/main/cropping.png for reference
 - **Custom crop areas** with drag handles
 - **Aspect ratio locking**
 - **Real-time preview** of cropped result
@@ -69,6 +70,15 @@ A browser-based image conversion and optimization tool that allows users to uplo
 - **Transparency detection** for PNG suggestions
 - **Photo vs. graphic detection** for optimal format selection
 - **File size comparisons** across formats
+
+#### 3.1.5 Filtering sub-tools
+A filters manu option opens to sub-tools
+- **Greyscale filter** affect the color from full color incrementing to greyscale
+- **Brightness filter** 
+- **Contrast filter** 
+- **Saturation filter** 
+- **Opacity filter** 
+- **Blur filter** 
 
 ### 3.2 Advanced Features
 
