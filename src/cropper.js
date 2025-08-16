@@ -39,7 +39,11 @@ export class Cropper {
         let w = endX - this.startX;
         let h = endY - this.startY;
         const aspect = this.aspectSelect.value;
-        if (aspect !== 'free') {
+        if (aspect === 'circle') {
+            const size = Math.min(Math.abs(w), Math.abs(h));
+            w = Math.sign(w) * size;
+            h = Math.sign(h) * size;
+        } else if (aspect !== 'free') {
             const [aw, ah] = aspect.split(':').map(Number);
             if (Math.abs(w) > Math.abs(h)) {
                 h = Math.sign(h) * Math.abs(w) * ah / aw;
@@ -61,20 +65,42 @@ export class Cropper {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.image, 0, 0);
         if (this.crop) {
+            const { x, y, w, h } = this.crop;
+            const sx = w >= 0 ? x : x + w;
+            const sy = h >= 0 ? y : y + h;
+            const sw = Math.abs(w);
+            const sh = Math.abs(h);
             this.ctx.strokeStyle = 'red';
             this.ctx.lineWidth = 2;
-            this.ctx.strokeRect(this.crop.x, this.crop.y, this.crop.w, this.crop.h);
+            if (this.aspectSelect.value === 'circle') {
+                const r = sw / 2;
+                this.ctx.beginPath();
+                this.ctx.arc(sx + r, sy + r, r, 0, Math.PI * 2);
+                this.ctx.stroke();
+            } else {
+                this.ctx.strokeRect(sx, sy, sw, sh);
+            }
         }
     }
 
     getCroppedImage() {
         if (!this.image || !this.crop) return null;
         const { x, y, w, h } = this.crop;
+        const sx = w >= 0 ? x : x + w;
+        const sy = h >= 0 ? y : y + h;
+        const sw = Math.abs(w);
+        const sh = Math.abs(h);
         const canvas = document.createElement('canvas');
-        canvas.width = Math.abs(w);
-        canvas.height = Math.abs(h);
+        canvas.width = sw;
+        canvas.height = sh;
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(this.image, x, y, w, h, 0, 0, Math.abs(w), Math.abs(h));
+        if (this.aspectSelect.value === 'circle') {
+            const r = sw / 2;
+            ctx.beginPath();
+            ctx.arc(r, r, r, 0, Math.PI * 2);
+            ctx.clip();
+        }
+        ctx.drawImage(this.image, sx, sy, sw, sh, 0, 0, sw, sh);
         return canvas;
     }
 }
