@@ -72,7 +72,19 @@ fetch('check_subscription.php')
     if (data.premium) {
       document.getElementById('upgrade').style.display = 'none';
     } else {
-      document.getElementById('filter-controls').style.display = 'none';
+      const filterControls = document.getElementById('filter-controls');
+      filterControls.setAttribute('open', '');
+      filterControls.querySelectorAll('input').forEach(input => input.disabled = true);
+      filterControls.querySelectorAll('.filter').forEach(filter => {
+        filter.style.position = 'relative';
+        const lock = document.createElement('div');
+        lock.className = 'feature-lock';
+        lock.title = 'Upgrade to access';
+        lock.addEventListener('click', () => {
+          window.open('payment.php', '_blank');
+        });
+        filter.appendChild(lock);
+      });
     }
   });
 </script>
