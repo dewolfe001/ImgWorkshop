@@ -1,8 +1,8 @@
 export class Cropper {
-    constructor(canvas, aspectSelect) {
+    constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
-        this.aspectSelect = aspectSelect;
+        this.aspect = 'free';
         this.image = null;
         this.dragging = false;
         this.startX = 0;
@@ -12,6 +12,10 @@ export class Cropper {
         this.canvas.addEventListener('mousedown', this.onDown.bind(this));
         this.canvas.addEventListener('mousemove', this.onMove.bind(this));
         this.canvas.addEventListener('mouseup', this.onUp.bind(this));
+    }
+
+    setAspect(aspect) {
+        this.aspect = aspect;
     }
 
     createShapePath(ctx, shape, x, y, w, h) {
@@ -132,7 +136,7 @@ export class Cropper {
         const endY = e.clientY - rect.top;
         let w = endX - this.startX;
         let h = endY - this.startY;
-        const aspect = this.aspectSelect.value;
+        const aspect = this.aspect;
         const squareShapes = ['circle', 'ellipse', 'triangle', 'diamond', 'star', 'pentagon', 'hexagon', 'heptagon', 'octagon', 'nonagon', 'decagon', 'trapezoid', 'parallelogram', 'left-arrow', 'right-arrow', 'left-point', 'right-point', 'bevel', 'rabbet', 'cross'];
         if (squareShapes.includes(aspect)) {
             const size = Math.min(Math.abs(w), Math.abs(h));
@@ -167,7 +171,7 @@ export class Cropper {
             const sh = Math.abs(h);
             this.ctx.strokeStyle = 'red';
             this.ctx.lineWidth = 2;
-            const shape = this.aspectSelect.value;
+            const shape = this.aspect;
             if (shape === 'free' || shape.includes(':')) {
                 this.ctx.strokeRect(sx, sy, sw, sh);
             } else {
@@ -189,7 +193,7 @@ export class Cropper {
         canvas.width = sw;
         canvas.height = sh;
         const ctx = canvas.getContext('2d');
-        const shape = this.aspectSelect.value;
+        const shape = this.aspect;
         if (shape !== 'free' && !shape.includes(':')) {
             ctx.beginPath();
             this.createShapePath(ctx, shape, 0, 0, sw, sh);
