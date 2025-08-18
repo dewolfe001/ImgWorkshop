@@ -38,8 +38,22 @@ h1, h2, h3, h4, h5, h6 {
 #sidebar {
     flex: 1;
     display: flex;
-    flex-direction: column;
     gap: 20px;
+}
+
+#sub-functions,
+#main-functions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#sub-functions {
+    flex: 1;
+}
+
+#main-functions {
+    align-items: flex-end;
 }
 
 #drop-zone {
@@ -60,16 +74,24 @@ canvas {
     margin-top: 10px;
 }
 
-#controls {
-    margin-top: 10px;
-}
-
-#controls > * {
-    margin-right: 10px;
-}
-
 #filter-controls {
-    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
+.sub-btn {
+    padding: 8px;
+    width: 100%;
+}
+
+#main-functions button {
+    padding: 8px;
+    width: 100%;
 }
 
 #upgrade {
