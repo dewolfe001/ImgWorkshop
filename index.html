@@ -33,6 +33,9 @@
         <option value="free">Free</option>
         <option value="1:1">Square</option>
         <option value="circle">Circle</option>
+        <option value="triangle" class="premium-option">Triangle</option>
+        <option value="diamond" class="premium-option">Diamond</option>
+        <option value="star" class="premium-option">Star</option>
         <option value="16:9">16:9</option>
         <option value="4:3">4:3</option>
       </select>
@@ -84,6 +87,11 @@ fetch('check_subscription.php')
           window.open('payment.php', '_blank');
         });
         filter.appendChild(lock);
+      });
+      const aspect = document.getElementById('aspect-ratio');
+      aspect.querySelectorAll('.premium-option').forEach(opt => {
+        opt.disabled = true;
+        opt.textContent += ' (Premium)';
       });
     }
   });
