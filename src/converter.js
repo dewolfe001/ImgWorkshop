@@ -14,7 +14,7 @@ export function convert(canvas, format, quality, filter) {
             const gif = new GIF({
                 workers: 2,
                 quality: gifQuality,
-                workerScript: 'lib/gif.worker.js'
+                workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js'
             });
             gif.addFrame(off, { copy: true });
             gif.on('finished', (blob) => resolve(blob));
