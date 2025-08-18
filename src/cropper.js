@@ -16,6 +16,14 @@ export class Cropper {
 
     setAspect(aspect) {
         this.aspect = aspect;
+        // Reset crop to cover entire image when aspect changes
+        if (this.image) this.resetCrop();
+    }
+
+    resetCrop() {
+        // Cover the entire image
+        this.crop = { x: 0, y: 0, w: this.canvas.width, h: this.canvas.height };
+        this.redraw();
     }
 
     createShapePath(ctx, shape, x, y, w, h) {
@@ -113,11 +121,29 @@ export class Cropper {
     }
 
     loadImage(img) {
-        this.image = img;
-        this.canvas.width = img.width;
-        this.canvas.height = img.height;
-        this.ctx.drawImage(img, 0, 0);
-        this.crop = null;
+        // Determine available area minus header (top) and sidebar (right)
+        const header = document.querySelector('header');
+        const sidebar = document.getElementById('sidebar');
+        const availW = window.innerWidth - (sidebar ? sidebar.offsetWidth : 0) - 40;
+        const availH = window.innerHeight - (header ? header.offsetHeight : 0) - 40;
+
+        let w = img.width;
+        let h = img.height;
+        const scale = Math.min(availW / w, availH / h, 1);
+        w *= scale;
+        h *= scale;
+
+        // Create scaled image to keep crop coordinates in sync
+        const off = document.createElement('canvas');
+        off.width = w;
+        off.height = h;
+        off.getContext('2d').drawImage(img, 0, 0, w, h);
+        this.image = off;
+
+        this.canvas.width = w;
+        this.canvas.height = h;
+        this.ctx.drawImage(this.image, 0, 0);
+        this.resetCrop();
     }
 
     onDown(e) {
@@ -183,7 +209,10 @@ export class Cropper {
     }
 
     getCroppedImage() {
-        if (!this.image || !this.crop) return null;
+        if (!this.image) return null;
+        if (!this.crop || !this.crop.w || !this.crop.h) {
+            this.resetCrop();
+        }
         const { x, y, w, h } = this.crop;
         const sx = w >= 0 ? x : x + w;
         const sy = h >= 0 ? y : y + h;
