@@ -89,6 +89,11 @@ canvas {
     width: 100%;
 }
 
+.sub-btn.active {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
 #main-functions button {
     padding: 8px;
     width: 100%;

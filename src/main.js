@@ -6,7 +6,6 @@ import { initFilters, getFilterString } from './filters.js';
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const canvas = document.getElementById('canvas');
-const formatSelect = document.getElementById('output-format');
 const qualityInput = document.getElementById('quality');
 const downloadBtn = document.getElementById('download');
 const subFunctions = document.getElementById('sub-functions');
@@ -15,11 +14,14 @@ const exportControls = document.getElementById('export-controls');
 
 const cropper = new Cropper(canvas);
 let isPremium = false;
+let currentFormat = 'image/jpeg';
 
 initFilters(canvas);
 
 function showCropping() {
     subFunctions.innerHTML = '';
+    filterControls.classList.add('hidden');
+    exportControls.classList.add('hidden');
     const options = [
         { value: 'free', label: 'Free' },
         { value: '1:1', label: 'Square' },
@@ -63,11 +65,35 @@ function showCropping() {
 
 function showFilters() {
     subFunctions.innerHTML = '';
+    exportControls.classList.add('hidden');
+    filterControls.classList.remove('hidden');
     subFunctions.appendChild(filterControls);
 }
 
 function showExport() {
     subFunctions.innerHTML = '';
+    filterControls.classList.add('hidden');
+    exportControls.classList.remove('hidden');
+    const formats = [
+        { value: 'image/jpeg', label: 'JPEG' },
+        { value: 'image/webp', label: 'WEBP' },
+        { value: 'image/png', label: 'PNG' },
+        { value: 'image/gif', label: 'GIF' }
+    ];
+    const formatContainer = document.createElement('div');
+    formats.forEach(f => {
+        const btn = document.createElement('button');
+        btn.textContent = f.label;
+        btn.className = 'sub-btn';
+        if (f.value === currentFormat) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+            currentFormat = f.value;
+            formatContainer.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+        formatContainer.appendChild(btn);
+    });
+    subFunctions.appendChild(formatContainer);
     subFunctions.appendChild(exportControls);
 }
 
@@ -93,7 +119,7 @@ downloadBtn.addEventListener('click', async () => {
         alert('Please select an area to crop');
         return;
     }
-    const format = formatSelect.value;
+    const format = currentFormat;
     const quality = parseFloat(qualityInput.value);
     const filter = getFilterString();
     const blob = await convert(cropped, format, quality, filter);
