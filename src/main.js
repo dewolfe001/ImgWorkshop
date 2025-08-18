@@ -19,6 +19,7 @@ let currentFormat = 'image/jpeg';
 initFilters(canvas);
 
 function showCropping() {
+    subFunctions.classList.remove('hidden');
     subFunctions.innerHTML = '';
     filterControls.classList.add('hidden');
     exportControls.classList.add('hidden');
@@ -64,6 +65,7 @@ function showCropping() {
 }
 
 function showFilters() {
+    subFunctions.classList.remove('hidden');
     subFunctions.innerHTML = '';
     exportControls.classList.add('hidden');
     filterControls.classList.remove('hidden');
@@ -71,6 +73,7 @@ function showFilters() {
 }
 
 function showExport() {
+    subFunctions.classList.remove('hidden');
     subFunctions.innerHTML = '';
     filterControls.classList.add('hidden');
     exportControls.classList.remove('hidden');
@@ -106,8 +109,7 @@ document.querySelectorAll('#main-functions button').forEach(btn => {
     });
 });
 
-// show cropping options by default
-showCropping();
+
 
 initUploader(dropZone, fileInput, (img) => {
     cropper.loadImage(img);
