@@ -354,6 +354,16 @@ canvas{
   font-size:1.05rem;
 }
 
+/* ---------- Form fields ---------- */
+.input{
+  width:100%;
+  padding:10px 14px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-xs);
+  background:var(--card);
+  color:var(--foreground);
+}
+
 /* ---------- Segmented control (Formats) ---------- */
 .segmented{
   display:flex;
