@@ -14,13 +14,17 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto p-8 max-w-md">
-        <h1 class="text-2xl font-bold mb-4 text-center">Account</h1>
-        <p class="mb-4">Logged in as: <?= htmlspecialchars($user['email'] ?? '') ?></p>
-        <div class="text-center"><a href="logout.php" class="text-blue-600">Logout</a></div>
+<body>
+    <div style="max-width:420px;margin:40px auto;">
+        <div class="panel">
+            <h3>Account</h3>
+            <p class="mb-4">Logged in as: <?= htmlspecialchars($user['email'] ?? '') ?></p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <a href="logout.php" class="btn btn-ghost">Logout</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>
