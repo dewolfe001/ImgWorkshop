@@ -84,6 +84,7 @@ function showExport() {
         { value: 'image/gif', label: 'GIF' }
     ];
     const formatContainer = document.createElement('div');
+    formatContainer.className = 'export-formats';
     formats.forEach(f => {
         const btn = document.createElement('button');
         btn.textContent = f.label;
