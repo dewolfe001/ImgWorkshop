@@ -14,6 +14,45 @@ export class Cropper {
         this.canvas.addEventListener('mouseup', this.onUp.bind(this));
     }
 
+    createShapePath(ctx, shape, x, y, w, h) {
+        if (shape === 'circle') {
+            const r = w / 2;
+            ctx.arc(x + r, y + r, r, 0, Math.PI * 2);
+            return;
+        }
+        switch (shape) {
+            case 'triangle':
+                ctx.moveTo(x + w / 2, y);
+                ctx.lineTo(x + w, y + h);
+                ctx.lineTo(x, y + h);
+                break;
+            case 'diamond':
+                ctx.moveTo(x + w / 2, y);
+                ctx.lineTo(x + w, y + h / 2);
+                ctx.lineTo(x + w / 2, y + h);
+                ctx.lineTo(x, y + h / 2);
+                break;
+            case 'star':
+                const cx = x + w / 2;
+                const cy = y + h / 2;
+                const spikes = 5;
+                const outer = w / 2;
+                const inner = outer / 2;
+                let rot = Math.PI / 2 * 3;
+                ctx.moveTo(cx, cy - outer);
+                for (let i = 0; i < spikes; i++) {
+                    ctx.lineTo(cx + Math.cos(rot) * outer, cy + Math.sin(rot) * outer);
+                    rot += Math.PI / spikes;
+                    ctx.lineTo(cx + Math.cos(rot) * inner, cy + Math.sin(rot) * inner);
+                    rot += Math.PI / spikes;
+                }
+                break;
+            default:
+                ctx.rect(x, y, w, h);
+        }
+        ctx.closePath();
+    }
+
     loadImage(img) {
         this.image = img;
         this.canvas.width = img.width;
@@ -39,7 +78,7 @@ export class Cropper {
         let w = endX - this.startX;
         let h = endY - this.startY;
         const aspect = this.aspectSelect.value;
-        if (aspect === 'circle') {
+        if (['circle', 'triangle', 'diamond', 'star'].includes(aspect)) {
             const size = Math.min(Math.abs(w), Math.abs(h));
             w = Math.sign(w) * size;
             h = Math.sign(h) * size;
@@ -72,10 +111,10 @@ export class Cropper {
             const sh = Math.abs(h);
             this.ctx.strokeStyle = 'red';
             this.ctx.lineWidth = 2;
-            if (this.aspectSelect.value === 'circle') {
-                const r = sw / 2;
+            const shape = this.aspectSelect.value;
+            if (['circle', 'triangle', 'diamond', 'star'].includes(shape)) {
                 this.ctx.beginPath();
-                this.ctx.arc(sx + r, sy + r, r, 0, Math.PI * 2);
+                this.createShapePath(this.ctx, shape, sx, sy, sw, sh);
                 this.ctx.stroke();
             } else {
                 this.ctx.strokeRect(sx, sy, sw, sh);
@@ -94,10 +133,10 @@ export class Cropper {
         canvas.width = sw;
         canvas.height = sh;
         const ctx = canvas.getContext('2d');
-        if (this.aspectSelect.value === 'circle') {
-            const r = sw / 2;
+        const shape = this.aspectSelect.value;
+        if (['circle', 'triangle', 'diamond', 'star'].includes(shape)) {
             ctx.beginPath();
-            ctx.arc(r, r, r, 0, Math.PI * 2);
+            this.createShapePath(ctx, shape, 0, 0, sw, sh);
             ctx.clip();
         }
         ctx.drawImage(this.image, sx, sy, sw, sh, 0, 0, sw, sh);
