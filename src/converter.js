@@ -9,9 +9,15 @@ export function convert(canvas, format, quality, filter) {
         }
         ctx.drawImage(canvas, 0, 0);
 
-        if (format === 'image/gif' && typeof GIF !== 'undefined') {
+        // gif.js attaches the constructor to `window` rather than providing a
+        // global variable binding. When this module runs in an ES module scope,
+        // referencing `GIF` directly results in an unresolvable reference and the
+        // GIF branch below is skipped. Access the constructor via `window.GIF`
+        // explicitly to ensure GIF exports are created when the library is
+        // loaded.
+        if (format === 'image/gif' && typeof window !== 'undefined' && window.GIF) {
             const gifQuality = Math.max(1, Math.round((1 - quality) * 30));
-            const gif = new GIF({
+            const gif = new window.GIF({
                 workers: 2,
                 quality: gifQuality,
                 workerScript: 'src/gif.worker.js'
